@@ -1,3 +1,348 @@
-<h1>
-hellow world
-</h1>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+  <style>
+    body {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('https://news.airbnb.com/wp-content/uploads/sites/4/2020/04/Airbnb_New_Zealand_Arrowtown_House.jpg');
+    background-size: cover; /* Cover the entire viewport */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Do not repeat the background image */
+    }
+
+    .login {
+        width: 50%;
+        margin: 0 auto;
+        border: 4px solid #007a87; /* Add border */
+        padding: 25px; /* Add padding */
+        background-color: rgba(206, 209, 204, 0.95); /* Background color with 80% intensity */
+        border-radius: 10px;
+     }
+
+      .login h1 {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 800;
+        color: #e84b50;
+        font-size: 38px;
+      }
+      
+      .login h2 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800; /* Semi-bold */
+        text-align: left;
+    }     
+      
+    .login form {
+      text-align: left;
+    }
+
+    .login label {
+      font-weight: bold;
+    }
+
+    .login input[type="text"],
+    .login input[type="number"] {
+      width: calc(50% - 10px);
+      margin-bottom: 10px;
+    }
+
+    .login button {
+        width: 100%;
+        margin-top: 10px;
+        background-color: #ff5a5f;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .login button:hover {
+        background-color: #ff3b3f;
+    }
+
+    input[type="number"] {
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+        width: calc(100% - 22px); /* Adjust the width as needed */
+        margin-bottom: 10px;
+    }
+
+    input[type="range"] {
+        width: 40%;
+        margin-right: 10px;
+        -webkit-appearance: none;
+        background-color: #f1f1f1;
+        height: 10px;
+        border-radius: 5px;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ff5a5f;
+        cursor: pointer;
+    }
+    
+
+  </style>
+</head>
+
+<body>
+    <br>
+  <div class="login">
+    <h1>AirBNB Listing Price Prediction</h1>
+    <br>
+    <hr>
+
+    <!-- Location Details -->
+    <h2>Location Details</h2>
+    <form action="{{ url_for('predict')}}" method="post">
+        
+      <label for="country">Country:</label>
+        <select id="country" name="Country" required="required">
+          <option value="">Select Country</option>
+          </select>
+          <br>
+        
+        <label for="city">City:</label>
+          <select id="city" name="City" required="required">
+            <option value="">Select City</option>
+          </select>
+          <br>
+          
+        <label for="neighbourhood_cleansed">Neighbourhood:</label>
+          <select id="neighbourhood_cleansed" name="Neighbourhood Cleansed" required="required">
+            <option value="">Select Neighbourhood</option>
+          </select>
+          <br>
+
+      <!-- Listing Features -->
+      <hr>
+      <h2>Listing Features</h2>
+      <label for="property_type">Property Type:</label>
+        <select id="property_type" name="Property Type" required="required">
+            <option value="">Select Property Type</option>
+        </select>
+        <br>
+
+        <label for="room_type">Room Type:</label>
+        <br>
+        <input type="radio" id="room_type_entire_place" name="Room Type" value="Entire home/apt"> Entire home/apt
+        <input type="radio" id="room_type_private_room" name="Room Type" value="Private room"> Private room
+        <input type="radio" id="room_type_shared_room" name="Room Type" value="Shared room"> Shared room
+        <br>
+
+    <br>
+        <label for="bed_type">Bed Type:</label>
+        <br>
+        <input type="radio" id="bed_type_real_bed" name="Bed Type" value="Real Bed"> Real Bed
+        <input type="radio" id="bed_type_pull_out_sofa" name="Bed Type" value="Pull-out Sofa"> Pull-out Sofa
+        <input type="radio" id="bed_type_futon" name="Bed Type" value="Futon"> Futon
+        <input type="radio" id="bed_type_couch" name="Bed Type" value="Couch"> Couch
+        <input type="radio" id="bed_type_airbed" name="Bed Type" value="Airbed"> Airbed
+        <br>
+
+      <br>
+      <label for="Accommodates">Accommodates:</label>
+      <input type="number" id="Accommodates" name="Accommodates" placeholder="Accommodates" required="required" value="3" /><br>
+
+      <label for="Bedrooms">Bedrooms:</label>
+      <input type="number" id="Bedrooms" name="Bedrooms" placeholder="Bedrooms" required="required" value="1" /><br>
+
+      <label for="Beds">Beds:</label>
+      <input type="number" id="Beds" name="Beds" placeholder="Beds" required="required" value="1" /><br>
+
+      <label for="cancellation_policy">Cancellation Policy:</label>
+        <select id="cancellation_policy" name="Cancellation Policy" required="required">
+        <option value="">Select Cancellation Policy</option>
+        </select>
+      <br>
+
+
+      <!-- Based on customer reviews -->
+      <hr>
+      <h2>Based on customer reviews</h2>
+      <label for="NumberOfReviews">Number of Reviews:</label>
+      <input type="number" id="NumberOfReviews" name="Number of Reviews" placeholder="Number of Reviews" required="required" value="23" /><br>
+
+      <label for="HostSinceDays">Host Since Days:</label>
+      <input type="number" id="HostSinceDays" name="Host Since Days" placeholder="Host Since Days" required="required" value="3579" /><br>
+
+      <br>
+
+      <label for="host_response_time">Host Response Time:</label>
+      <br>
+      <input type="radio" id="host_response_time_within_hour" name="Host Response Time" value="within an hour"> within an hour
+      <input type="radio" id="host_response_time_within_few_hours" name="Host Response Time" value="within a few hours"> within a few hours
+      <input type="radio" id="host_response_time_within_day" name="Host Response Time" value="within a day"> within a day
+      <input type="radio" id="host_response_time_few_days_or_more" name="Host Response Time" value="a few days or more"> a few days or more
+      <br>
+
+      <br>
+    
+      <label for="ReviewScoresRating">Average Score:</label>
+      <input type="range" id="ReviewScoresRating" name="Review Scores Rating" min="20" max="100" step="0.1" value="93" />
+      <span id="ReviewScoresRatingValue">93</span><br>
+          
+      <br>
+      
+      <label for="ReviewScoresAccuracy">Accuracy Score:</label>
+      <input type="range" id="ReviewScoresAccuracy" name="Review Scores Accuracy" min="2" max="10" step="0.1" value="9.5" />
+      <span id="ReviewScoresAccuracyValue">9.5</span><br>
+          
+      <br>
+
+      <label for="ReviewScoresCleanliness">Cleanliness Score:</label>
+      <input type="range" id="ReviewScoresCleanliness" name="Review Scores Cleanliness" min="2" max="10" step="0.1" value="9.3" />
+      <span id="ReviewScoresCleanlinessValue">9.3</span><br>
+          
+      <br>
+
+      <label for="ReviewScoresCheckin">Checkin Score:</label>
+      <input type="range" id="ReviewScoresCheckin" name="Review Scores Checkin" min="2" max="10" step="0.1" value="9.7" />
+      <span id="ReviewScoresCheckinValue">9.7</span><br>
+          
+      <br>
+
+      <label for="ReviewScoresCommunication">Communication Score:</label>
+      <input type="range" id="ReviewScoresCommunication" name="Review Scores Communication" min="2" max="10" step="0.1" value="9.7" />
+      <span id="ReviewScoresCommunicationValue">9.7</span><br>
+          
+      <br>
+
+      <label for="ReviewScoresLocation">Location Score:</label>
+      <input type="range" id="ReviewScoresLocation" name="Review Scores Location" min="2" max="10" step="0.1" value="9.4" />
+      <span id="ReviewScoresLocationValue">9.4</span><br>
+          
+      <br>
+
+      <label for="ReviewScoresValue">Value Score:</label>
+      <input type="range" id="ReviewScoresValue" name="Review Scores Value" min="2" max="10" step="0.1" value="9.3" />
+      <span id="ReviewScoresValueValue">9.3</span><br>
+
+      <br>
+      <hr>
+      <br>
+      <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+      <br>
+    </form>
+  </div>
+  <br>
+  <div style="background-color: #d2f5de; /* Light green background */
+            border: 2px solid #007a87; /* Dark green border */
+            border-radius: 10px; /* Rounded corners */
+            padding: 10px; /* Padding for content */
+            font-weight: bold;
+            font-size: 24px; /* Bold text */
+            margin: 0 auto; /* Center the div horizontally */
+            max-width: 80%; /* Set maximum width to 80% of the container */
+            box-sizing: border-box; /* Include padding and border in the width calculation */">
+    {{prediction_text}}
+</div>
+
+
+<br>
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
+
+<script>
+
+// Select all range input elements
+var rangeInputs = $("input[type='range']");
+
+// Function to update the displayed value
+function updateValueDisplay(rangeInput) {
+  var value = rangeInput.val();
+  var spanId = "#" + rangeInput.attr("id") + "Value"; // Construct the corresponding span ID
+  $(spanId).text(value);
+}
+
+// Update displayed value on initial load
+rangeInputs.each(function() {
+  updateValueDisplay($(this));
+});
+
+// Update displayed value on change
+rangeInputs.on("input", function() {
+  updateValueDisplay($(this));
+});
+
+$(document).ready(function() {
+  // Your list of countries (replace with your actual data source)
+  var countries = ['United States', 'Australia', 'Denmark', 'Ireland', 'United Kingdom', 'Hong Kong', 'Spain', 'France', 'Netherlands', 'Canada', 'Greece', 'Germany', 'Belgium', 'Italy', 'Austria', 'Switzerland'];
+
+  // Your list of cities (replace with your actual data source)
+  var cities = ['Brooklyn', 'Byron Bay', 'Suffolk Park', 'Bangalow', 'Oakland', 'Copenhagen', 'København', 'Chicago', 'Denver', 'Dublin', 'Clontarf', 'Copenhagen V', 'Drumcondra', 'Donabate', 'Dublin 8', 'London', 'Hong Kong', 'Ilford', 'Croydon', '伦敦', 'Hampton Wick', 'Los Angeles', 'Long Beach', 'Inglewood', 'Venice', 'Madrid', 'Alhambra', 'Paris', 'Paris-11E-Arrondissement', 'Portland', 'New York', 'Banora Point', 'Federal', 'Queens', 'Lennox Head', 'Amsterdam', 'Campos', 'Santa Eugènia', 'Palma de Mallorca', 'Palma', 'Camden Town', 'Muro', 'Alcúdia', 'Pollença', 'New Orleans', 'Glendale', 'Malibu', 'Marina del Rey', 'Lancaster', 'Culver City', 'Pasadena', 'Studio City', 'West Hollywood', 'Malvern East', 'South Yarra', 'Box Hill North', 'Melbourne', 'Southbank', 'Port Melbourne', 'Elwood', 'Frankston South', 'Montréal', 'North Melbourne', 'Carlton', 'Abbotsford', 'Athina', 'Αθήνα', 'Berlin', 'Ixelles', 'Saint-Gilles', 'Boston', 'Etterbeek', 'Toronto', 'Haymarket', 'Camperdown', 'Ultimo', 'Surry Hills', 'Washington', 'Roma', 'Rome', 'Piana del Sole', 'San Diego', 'San Francisco', 'Watsonville', 'Santa Cruz', 'Seattle', 'Maroubra', 'Randwick', 'Coogee', 'Bondi', 'Bondi Beach', 'Canterbury', 'Chippendale', 'Ville de Québec', 'Wien', 'Vienna', 'Vancouver', 'Venezia', 'Riva del Garda', 'Waitara', 'Manly', 'Balgowlah', 'Darlinghurst', 'Sydney', 'Parramatta', 'Chatswood', 'Cronulla', 'Annandale', 'Millers Point', 'East Ballina', 'New Brighton', 'Elmhurst', 'Mullumbimby', 'Astoria', 'Santa Monica', 'Windsor', 'Yarraville', 'Notting Hill', 'Clayton', 'Richmond', 'Vermont South', 'Pacific Palisades', 'Walnut', 'Rosemead', 'Santanyí', 'Greater London', 'Topanga', 'West Melbourne', 'Saint Kilda East', 'Montreal', 'Hawthorn', 'Collingwood', 'Seddon', 'Bentleigh', 'Brunswick', 'Nashville', 'Sóller', 'Campanet', 'Thornbury', 'Bushwick', 'Cas Català', 'Calvià', 'Can Pastilla', 'Caimari', 'Gènova', 'Algaida', 'Barcelona', 'Londra', 'Paris-18E-Arrondissement', 'Darling Point', 'Moena', 'Amsterdam Zuid-Oost', 'Londres', 'Frederiksberg', 'Arcadia', 'Beverly Hills', 'Carson', 'Lomita', 'Edinburgh', 'Staten Island', 'Surbiton', 'Beckenham', '香港', 'Wimbledon', 'Temple City', 'View Park-Windsor Hills', 'Whittier', 'Genève', 'Hong Kong Island', 'Stepaside', '旺角', 'Feltham', 'Brunswick Heads', 'Bronx', 'Paris-15E-Arrondissement', 'Paris-9E-Arrondissement', 'Illes Balears', 'Artà', 'Son Servera', 'Fitzroy', 'El Segundo', 'Lynwood', 'Redondo Beach', 'Playa Del Rey', 'Geneva', 'Central', 'Sheung Wan', 'Northolt', 'Woodford', 'Forest', 'Schaerbeek', 'Bruxelles', 'Cala Figuera', 'Sant Elm', 'Sa Pobla', 'Antwerpen', 'Prahran', 'Saint Kilda', 'Manchester', 'South Melbourne', 'Flemington', 'South Gate', 'Crumlin', 'Rathmines', 'Saint-Josse-ten-Noode', 'Brussels', 'Amsterdam-Zuidoost', 'Rego Park', 'Bondi Junction', 'Ville de Bruxelles', 'London Borough of Hackney', 'Bexley', 'Llucmajor', 'Can Picafort', 'Son Serra de Marina', 'Waterloo', 'Artarmon', 'Trento', 'Mezzana', 'Chifley', 'Tamarama', 'Castle Hill', 'Neutral Bay', 'Paddington', 'Jette', 'Koekelberg', 'Tsim Sha Tsui', 'Hornchurch', 'Wembley', 'Inca', 'Santa Ponsa', 'St Kilda East', 'Albert Park', 'Northcote', 'North Bondi', 'Glebe', 'Avalon Beach', 'Kingsford', 'Dover Heights', 'Naremburn', 'København K', 'Frederiksberg C', 'Hampton Hill', 'London Borough of Islington', 'Versoix', 'Causeway Bay', 'Donaghmede', 'London, England, GB', 'Dublin 7', 'Ringsend', 'Claremont', 'Avalon', 'Ferntree Gully', 'Box Hill', 'Banyalbufar', 'Lloseta', 'Malvern', 'East Melbourne', 'Brunswick East', 'Forest Hill', 'Outremont', 'Issy-les-Moulineaux', 'Fitzroy North', 'St Kilda', 'Quebec', 'Paris-1ER-Arrondissement', 'Boulogne-Billancourt', 'Frankston', 'Box Hill South', 'Donvale', 'Rotes Velles', 'Porreres', 'Sa Torre', 'Portocolom', 'El Monte', 'Wan Chai', 'New Malden', 'Santa Margalida', 'Son Carrió', 'Pollensa', 'Malahide', 'Selva', 'Biniali', 'South Pasadena', 'Hounslow', 'Greenford', 'Cambridge', 'Gaillard', 'Howth', 'Mongkok', '香港香港', 'Southall', 'Uccle', 'Woluwe-Saint-Lambert', 'Sandymount', 'Sydney Olympic Park', 'Marrickville', 'Clovelly', 'Epping', 'North Parramatta', 'Elizabeth Bay', 'Québec', 'Bellevue Hill', 'Newtown', 'Tempe', 'Eastwood', 'Lilyfield', 'Balmain', 'Rovereto', 'Freshwater', 'Lane Cove West', 'Curl Curl', 'Charenton-le-Pont', 'Enmore', 'Stanmore', 'Redfern', 'Alexandria', 'Lido', 'Balgowlah Heights', 'Fairlight', 'Athens', 'Valby', 'Monrovia', 'Dagenham', 'Hackney', 'Manacor', 'Capdepera', 'Lido di Ostia', 'Molenbeek-Saint-Jean', 'Brønshøj', 'Kensington', 'Carlton North', 'Mallorca', 'Kingston upon Thames', 'Brentford', 'Harrow', 'La Jolla', 'Northmead', 'Concord', 'Erskineville', 'North Sydney', 'Saint Peters', 'Palm Beach', 'Bronte', 'Paris-4E-Arrondissement', 'Ryde', 'Leichhardt', 'Woollahra', 'Seaforth', 'Summer Hill', 'Mascot', 'Lewisham', 'Vaucluse', 'Bayswater', 'Murrumbeena', 'Brussel', 'Santry', 'Donnybrook', 'Blackrock', 'Ealing', 'Glendora', 'Manhattan Beach', 'London Borough of Wandsworth', 'Azusa', 'Altadena', 'Edimburgo', 'Jordan', 'Islington', 'Lilydale', 'Alaró', 'La Puebla', 'Dublin 1', 'Rowland Heights', 'Burbank', 'venice', 'Parkville', 'PARIS', 'Meadowbank', 'Potts Point', 'McMahons Point', 'Colònia de Sant Jordi', 'Binissalem', 'Maria de la Salut', 'Petra', 'Sineu', 'Kew', 'Maribyrnong', 'Docklands', 'Altona North', 'Carnegie', 'The Patch', 'Watermael-Boitsfort', 'Brookline', 'Alphington', 'Oakleigh East', 'Doncaster', 'Lismore', 'barcelona', 'Dundrum', 'Ranelagh', 'Sydenham', 'Woluwe-Saint-Pierre', 'Kowloon', 'Daly City', 'Bilgola Plateau', 'North Narrabeen', 'Woolloomooloo', 'Beecroft', 'Palma de mallorca', 'Glen Waverley', 'Footscray', 'St Kilda West', 'Mentone', 'Camberwell', 'San Gabriel', 'Palmanova', 'Altona', 'Torrance', 'Verdun', 'Edgware', 'Hollywood', 'Ballina', 'Paris-12E-Arrondissement', 'Barcelona, Catalunya, ES', 'Dublin 4', 'Costitx', 'Granville', 'Macquarie Park', 'Pymble', 'North York', 'Los Gatos', 'Long Island City', 'Rushcutters Bay', 'Enfield', 'Wahroonga', 'Milsons Point', 'Cremorne', 'Darlington', 'Mestre', 'Ziano di Fiemme', 'South Coogee', 'Waverley', 'Cremorne Point', 'Brookvale', 'Ermington', 'Queens Park', 'Hayes', 'Teddington', 'Welling', 'Esporles', 'Willoughby', 'Cherrybrook', 'Mona Vale', 'Baldwin Park', 'Sencelles', 'Vilafranca de Bonany', 'Beaumaris', 'Healesville', 'Valldemossa', 'Beaconsfield', 'København S', 'Foxrock', 'Plan-les-Ouates', 'Crows Nest', 'Lane Cove', 'Kurraba Point', 'Colonia de Sant Pere', 'Illetes', 'Paris-16E-Arrondissement', 'paris', 'Folgarida', 'Lindfield', 'Strathfield', 'Pinzolo', 'Anderlecht', 'Schaarbeek', 'Thornton Heath', 'Mitcham', 'Twickenham', 'Pyrmont', 'Paris-6E-Arrondissement', 'Paris-20E-Arrondissement', 'Rosebery', 'Dulwich Hill', 'Queenscliff', 'Lane Cove North', 'Santa Clarita', 'Allambie Heights', 'Hurstville', 'Turrella', 'Roseville', 'Paris-13E-Arrondissement', 'Gentilly', 'The Pocket', 'Saint-Ouen', 'Vincennes', 'Saint Albans', 'Hawthorne', 'Hermosa Beach', 'Dalkey', 'Ballsbridge', 'Hung Hom', 'Puigpunyent', 'Marratxí', 'Ringwood', 'Somerville', 'Evere', 'Ruislip', 'Hong Kong, Hong Kong', 'Moscari', 'Deià', 'Auderghem', 'Costa de la Calma', 'Hampton', 'Heidelberg', 'Pointe-Claire', 'Sint-Lambrechts-Woluwe', 'Petersham', 'Rockdale', 'Washington, D.C.', 'Flushing', "L'Hospitalet de Llobregat", 'Sutton', 'Kingscliff', 'Sa Ràpita', "Port d'Andratx", 'Hadfield', 'Sunbury', 'Dollard-des-Ormeaux', 'Molveno', 'Kogarah', 'Mosman', 'Venice Beach', 'Werribee', 'Artane', 'Sham Shui Po', 'Lawndale', 'Nago-torbole', 'Double Bay', 'Swords', 'Búger', 'Reservoir', 'Andratx', 'West Footscray', 'Millgrove', 'City of Brussels', 'Antwerp', 'Port de Pollença', 'Brighton East', 'Ivanhoe', 'Palmdale', 'Manhattan', 'Cala Ratjada', 'Brighton', 'Doncaster East', 'Warburton', 'Emerald', 'Felanitx', 'Killara', 'Eastgardens', 'Sylvania', 'Dolls Point', 'Scotland Island', 'Ocean Shores', 'Cala Llombards', 'Ses Salines', 'Diamond Bar', 'Barking', 'Templestowe', 'Paris-14E-Arrondissement', 'Chula Vista', 'Rose Bay', 'Burwood', 'Brez', 'Alba-penia', 'Zetland', 'North Ryde', 'Lido di Venezia', 'Paris-10E-Arrondissement', 'Warriewood', 'Edgecliff', 'Pomona', 'long beach', 'La Puente', 'London Borough of Camden', 'Lucan', 'West Covina', 'Bunyola', 'Pinner', 'San Dimas', 'Woodland Hills', 'Jamaica Plain', 'Toorak', 'Skennars Head', 'Cala Millor', 'Highett', 'Keysborough', 'Springvale', 'Sandringham', 'Monterey Park', 'Point Cook', 'Sant Llorenç des Cardassar', 'Sans Souci', 'Narrabeen', 'Aptos', 'Newport', 'Dolphins Barn', 'Sai Ying Pun', 'Puerto de Alcudia', 'Estellencs', 'San Martino di Castrozza', 'Mestre Venezia', 'Ashfield', 'Marsfield', 'Thornleigh', 'Northwood', 'Kirribilli', 'Cala Pi', 'Brentwood', 'Preston', 'Boulder Creek', 'Paris-5E-Arrondissement', 'Paris-3E-Arrondissement', 'Scotts Valley', 'Wollstonecraft', 'Arco', 'Dro', 'Paris-17E-Arrondissement', 'brooklyn', 'Jackson Heights', 'Ridgewood', 'Ledro', 'Yamba', 'Ashburton', 'Orpington', 'Bromley', 'Bellevue', 'Pottsville', 'Manly Vale', 'Armadale', 'Rosanna', 'Felton', 'Brighton-Le-Sands', 'St Leonards', 'Wentworth Point', 'Gardena', 'Sant Joan', 'Heidelberg West', 'Llubí', 'Yarra Junction', 'Balwyn North', 'Bentleigh East', 'London Borough of Southwark', 'Rancho Palos Verdes', 'København N', 'Isleworth', 'Lancy', 'Ses Palmeres', 'Ballinteer', 'Dublin 2', 'Harlington', 'Le Grand-Saconnex', '佐敦', 'Caulfield South', 'Lakewood', 'Brent', 'Santa Maria del Camí', 'København NV', 'Hacienda Heights', 'Vallgornera', 'Sunshine', 'Ascot Vale', 'Moonee Ponds', 'Coburg', 'Oak Park', 'Hawthorn East', 'Raheny', 'london', 'Pico Rivera', 'Balaclava', 'Chigwell', 'Whale Beach', 'Centennial Park', 'Côte Saint-Luc', 'Onex', 'Middle Park', 'Fairfield', 'NY', 'Collonge-Bellerive', 'Calabasas', 'North Hollywood', 'Compton', 'Burnley', 'Arverne', 'Porto Cristo', 'Cala Mesquida', 'Sherman Oaks', 'Westmount', 'McKinnon', 'Mal Pas-Bon Aire', 'Kingsville', 'Cerritos', 'Municipio Roma X', 'Hellerup', 'Porto Cristo Novo', 'Montrouge', 'Mancor de la Vall', 'Peguera', 'Williams Landing', 'Dee Why', 'Greenwich', 'Cammeray', 'Drummoyne', 'Toongabbie', 'Newrybar', 'Corona', 'Hunters Hill', 'Québec City', 'North Curl Curl', 'London Borough of Tower Hamlets', 'Glasnevin', 'Vanløse', 'Westminster', 'Kimmage', 'Olinda', 'Paris-19E-Arrondissement', 'Rush', 'Covina', 'Woluwé-Saint-Lambert', 'Chelsea', 'South Golden Beach', 'Gordon', 'Rozelle', 'Northbridge', 'Rhodes', 'Forest Lodge', 'Lamma Island', 'Chiswick', 'Clonskeagh', 'South Croydon', 'Milltown', 'Morden', 'Bellflower', 'Elsternwick', 'Williamstown', 'Cheltenham', 'Sierra Madre', 'Stratford', 'Kennedy Town', 'Birchgrove', 'Cogolo', 'Hornsby', 'Bundeena', 'Campitello di Fassa', 'Wolli Creek', 'Sint-Gillis', 'Acilia-castel Fusano-ostia Antica', 'Ashwood', 'Belgrave', 'Campsie', 'Beacon Hill', 'Veyrier', 'Yau Ma Tei', 'Noble Park', 'Bundoora', 'Fingal Head', 'Sa Coma', 'Cala Santanyí', 'Cala Sant Vicenç', 'Arta', 'Earlwood', 'Balmain East', 'Botany', 'Blacktown', 'Waverton', 'Wilsons Creek', 'Soquel', 'Essendon', 'Clayton South', 'Braybrook', 'Castleknock', 'Elsene', 'Bilgola Beach', 'Del Mar', 'Badger Creek', 'Montuïri', 'Kalorama', 'Yarra Glen', 'Vorst', 'Sandyford', 'Dun Laoghaire', 'Roxbury Crossing', 'Forest Hills', 'Broken Head', 'Tweed Heads', 'Barnet', 'Finglas', "Cala D'or", 'La Crescenta-Montrose', 'Maidstone', 'Ben Lomond', 'Putney', 'North Strathfield', 'Saint-Mandé', 'North Manly', 'Berchem-Sainte-Agathe', '马德里', 'Caulfield North', 'Princes Hill', 'København V', 'Chêne-Bourg', 'Baldoyle', 'Sint-Jans-Molenbeek', 'Hong kong', 'Woodside', 'Jamaica', 'Myocum', 'Gladesville', 'Baselga di Piné', 'Palma, Illes Balears, ES', 'Canazei', 'Lavis', 'Portmarnock', 'Wandsworth', 'Homebush', 'Acilia-Castel Fusano-Ostia Antica', "Urbanització s'Estanyol", 'Purley', 'Jackson heights', 'Belmore', 'Drimnagh', 'Rosebank', 'Casuarina', 'Charlestown', 'Ormond', 'Brunswick West', 'Queensferry', 'Coburg North', 'Craigieburn', "Port d'Alcúdia", 'West Ryde', 'Panania', 'Lloret de Vistalegre', 'Pascoe Vale South', 'North Balgowlah', 'Mulgrave', 'Rowville', 'Santa Ponça', 'Topanga Canyon', 'Andalo', 'Neuilly-sur-Seine', 'Skerries', 'Paris-8E-Arrondissement', 'Magaluf', 'Sa Vileta-Son Rapinya', 'Mong Kok', 'Agoura Hills', 'Brixton', 'Perivale', 'Madrid, Comunidad de Madrid, ES', 'Port de Sóller', 'West Drayton', 'Carouge', 'Duarte', 'Capitola', 'Montebello', 'Merrylands', 'Ses Covetes', 'Mount Waverley', 'Cockatoo', 'Lambeth', '尖沙咀', 'Poplar', 'Truganina', 'Rathgar', 'Lavender Bay', 'Aucanada', 'Capitol Heights', 'Greensborough', 'Cas Concos des Cavaller', 'Glen Iris', '香港島', 'Portals Nous', 'Palma (Mallorca)', 'Warrandyte', 'Saint Kilda West', 'Castle Cove', 'Wantirna South', 'Clifton Hill', 'Port des Canonge', 'Eltham', 'The Rocks', 'Quebec City', 'La Cañada Flintridge', 'Coorabell', 'LONDON', 'Balwyn', 'Parkdale', 'Glen Huntly', 'Cabra', 'Cala Murada', 'Canyamel', 'Fornalutx', 'Narre Warren', 'Madison', 'Islands District', 'Travancore', 'Westlake Village', 'Glenroy', 'Westmeadows', 'Carshalton', 'Cala Ferrera', 'Palmanyola', 'Cielo de Bonaire', 'Haberfield', 'Dorval', 'Park Orchards', 'Los Angeles County', 'Deia', 'København Ø', 'MONG KOK', 'Coulsdon', 'Барселона', 'Clareville', 'Soller', 'Roxburgh Park', 'Hampstead', 'Wheelers Hill', 'Bonbeach', 'Pakenham', 'Predazzo', 'Vernier', 'Great Mackerel Beach', 'Fiera di Primiero', 'South Wentworthville', 'Arncliffe', 'Matraville', 'Saint Leonards', 'Ostia', 'San Lorenzo Dorsino', 'Pozza di Fassa', 'Rockaway Beach', 'Sunnyside', 'Mount Dandenong', 'Hurlstone Park', 'Levallois-Perret', "S'Illot", 'Caulfield', 'Hughesdale', 'Romford', 'Tullamarine', 'Barcelone', 'Fairview', 'Chislehurst', 'Riverwood', 'Forestville', 'Berkeley', 'Frenchs Forest', 'Madonna di Campiglio', 'Possum Creek', 'Piedmont', 'Carlingford', 'Panchià', 'Dublín', 'Eastlakes', 'Deyá', 'Ariany', 'Kellyville', 'Pagewood', 'Balearic Islands', 'Uxbridge', "S'Horta", 'Thônex', 'Paris-2E-Arrondissement', 'Port d´Alcudia', 'Bayview', 'Surrey Hills', 'Dorchester', 'Puigderrós', 'Hillsdale', 'Alcudia', 'roma', 'Penrith', 'Miranda', 'Scarborough', 'Collaroy Plateau', 'Malabar', 'Paris, Île-de-France, FR', 'Cala Anguila-Cala Mendia', 'Mar Vista', 'Churchtown', '九龍', 'Dandenong', 'Ganshoren', 'Glenwood', 'Auburn', 'Es Llombards', 'Sassafras', 'Grand-Lancy', 'Belvedere', 'Cales de Mallorca', 'San Pedro', 'Downey', 'Santanyi', 'Marino', 'Caringbah', 'Folgaria', 'Goonengerry', 'flushing', 'Killiney', 'Bray', 'Wyndham Vale', 'Revesby', 'Emeryville', 'Cala Mendia', 'Puerto Pollença', 'Le Pré-Saint-Gervais', 'Cala Vinyes', 'Guildford', 'Campo Carlo Magno', 'Little Bay', 'Killarney Heights', 'La Mirada', 'Yau Tsim Mong District', 'Caroline Springs', 'Clondalkin', '油麻地', 'Betlem', 'Meyrin', 'Llubi', 'Five Dock', 'Monterey', 'Bankstown', 'Sidcup', 'Seaford', 'Mullumbimby Creek', "S'Estanyol de Migjorn", 'East Elmhurst', 'Wanchai', 'Kastrup', 'Font de Sa Cala', 'Baulkham Hills', 'Escorca', 'Valley Village', 'Grafton', 'Consell', 'Kingsgrove', "S'Alqueria Blanca", 'Watsons Bay', 'Levico Terme', 'Cromer', 'Portopetro', 'Sol de Mallorca', 'Hoppers Crossing', 'Worcester Park', 'Homebush West', 'Paris-7E-Arrondissement', 'Tesero', 'Belrose', 'Signal Hill', 'Ewingsdale', 'Penshurst', 'Clunes', 'Coopers Shoot', 'Teach Mealóg', 'Carisolo', 'Mordialloc', 'Campbelltown', 'Spotswood', 'El Arenal', 'Cala Blava', 'New Barnet', 'Newington', 'Oatley', 'Passo del Tonale', 'Long Island city', 'Mont Albert', 'Biniamar', 'Tenno', 'West Pennant Hills', 'Hammersmith', 'La Verne', 'Pantin', 'Mong kok', 'Cavalese', 'Edithvale', 'Irishtown', 'Malè', 'Son Macià', 'Collaroy', 'Bexleyheath', 'Far Rockaway', 'Lantau Island', 'Son Moll', 'Pollensa / Pollença', 'Marilleva 1400', 'Glenfield', 'Aspendale', 'Tallaght', 'København SV', 'St Peters', 'Westmead', 'Ukkel', 'Turramurra', 'Croydon Park', 'Chêne-Bougeries', 'Ripponlea', "Costa d'en Blanes", 'Saint Ives', 'Van Nuys', 'Torrenova', 'Blanchardstown', 'El Toro', 'Austin', 'Erith', 'HK', 'Heidelberg Heights', 'Urbanització Montferrutx', 'Pascoe Vale', 'Smithfield', 'Allston', 'Berwick', 'Wallington', 'Upwey', 'Booterstown', 'Blackburn', 'La Habra Heights', 'Greenvale', 'Sutherland', "S'Arenal", '维也纳', 'Arenal', 'Norwalk', 'Narraweena', 'Elanora Heights', 'Es Pelats', "S'Illot-Cala Morlanda", 'Binissalem-Mallorca DO', 'Orient', 'Vaughan', 'Monkstown', 'San Fernando', 'Carano', "S'Arracó", "Sant'Antonio di Mavignola", 'Stevenson Ranch', 'Kallista', 'Palos Verdes Estates', 'North Point', 'Puerto Pollensa', 'Caringbah South', 'Dundas Valley', 'Platja de Muro', 'Colonia Sant Pere', 'Ivry-sur-Seine', 'Vigo di Fassa', 'Chadstone', 'Walthamstow', 'Sa Rapita', 'Cala Agulla', 'Lluchmayor', 'Marratxinet', 'Playa de Muro', 'Cologny', 'Cala Lliteres', 'Rabbi', 'Rødovre', 'Buger', 'Yau Tsim Mong', 'LLucmajor', 'Ca´n Picafort'];
+
+  // Your list of neighbourhoods (replace with your actual data source)
+  var neighbourhoods = ['Williamsburg', 'BYRON SHIRE COUNCIL', 'Temescal', 'Vesterbro-Kongens Enghave', 'Amager Vest', 'Amager st', 'Near North Side', 'Speer', 'Rosedale', 'Cheesman Park', 'Dublin City', 'Nrrebro', 'Fingal', 'Waltham Forest', 'Brent', 'Yau Tsim Mong', 'Redbridge', 'Sutton', 'Barnet', 'Ealing', 'Lambeth', 'Austin', 'Logan Square', 'West Town', 'Southwark', 'Greenwich', 'Lewisham', 'Wandsworth', 'Merton', 'Richmond upon Thames', 'Indre By', 'Hammersmith and Fulham', 'Elysian Park', 'Fairfax', 'Hollywood', 'Hancock Park', 'Hackney', 'Brentwood', 'Beverly Grove', 'Long Beach', 'Mar Vista', 'Inglewood', 'Koreatown', 'Highland Park', 'Venice', 'Embajadores', 'Palacio', 'Adams-Normandie', 'Alhambra', 'Entrepôt', 'Palais-Bourbon', 'Buttes-Chaumont', 'Passy', 'Popincourt', 'Bourse', 'Ménilmontant', 'Temple', 'Panthéon', 'Portsmouth', 'Alameda', 'Buttes-Montmartre', 'Observatoire', 'Greenwich Village', 'Kensington', 'Greenpoint', 'Harlem', 'Inwood', 'Morningside Heights', 'West Village', 'TWEED SHIRE COUNCIL', 'Kips Bay', 'Midtown', 'Murray Hill', 'Long Island City', 'Upper West Side', 'Bedford-Stuyvesant', 'Sheepshead Bay', 'South Slope', 'Red Hook', 'Chelsea', 'East Village', 'Bushwick', 'BALLINA SHIRE COUNCIL', 'Chinatown', 'Astoria', 'East Harlem', 'Centrum-West', 'Centrum-Oost', 'Westerpark', 'Oud-Noord', 'De Pijp - Rivierenbuurt', 'Campos', 'Santa Eugènia', 'San Juan Bautista', 'Palma de Mallorca', 'Kensington and Chelsea', 'City of London', 'Westminster', 'Camden', 'Muro', 'Alcúdia', 'Pollença', 'Marigny', 'Freret', 'Downtown', 'Glendale', 'Playa Vista', 'Malibu', 'Palms', 'Hollywood Hills', 'Marina del Rey', 'Lancaster', 'Los Feliz', 'Mid-City', 'Islington', 'Tower Hamlets', 'Pasadena', 'Studio City', 'Silver Lake', 'West Hollywood', 'Westlake', 'Stonnington', 'Whitehorse', 'Port Phillip', 'Frankston', 'Ville-Marie', 'Melbourne', 'Yarra', 'Del Rey', 'Larchmont', 'Buckman', 'Sunnyside', 'Noord-West', 'Bijlmer-Oost', 'De Baarsjes - Oud-West', 'ΘΗΣΕΙΟ', 'ΚΟΛΩΝΑΚΙ', 'ΖΑΠΠΕΙΟ', 'Buitenveldert - Zuidas', 'Osdorp', 'Bos en Lommer', 'ΑΓΙΟΣ ΕΛΕΥΘΕΡΙΟΣ', 'ΕΜΠΟΡΙΚΟ ΤΡΙΓΩΝΟ-ΠΛΑΚΑ', 'ΠΕΔΙΟ ΑΡΕΩΣ', 'Karl-Marx-Allee-Süd', 'Ixelles', 'Saint-Gilles', 'Fenway', 'Back Bay', 'East Boston', 'Spandau Mitte', 'Ostpreußendamm', 'Schillerpromenade', 'North End', 'Etterbeek', 'Lower East Side', 'Tribeca', "Hell's Kitchen", 'Prospect Heights', 'Upper East Side', 'Adams Point', 'Bushrod', 'Windsor Terrace', 'Washington Heights', 'Prospect-Lefferts Gardens', 'Clinton Hill', 'Crown Heights', 'South Riverdale', 'Sydney', 'Union Station, Stanton Park, Kingman Park', 'Edgewood, Bloomingdale, Truxton Circle, Eckington', 'Columbia Heights, Mt. Pleasant, Pleasant Plains, Park View', 'Hôtel-de-Ville', 'Woodlawn', 'I Centro Storico', 'VI Roma delle Torri', 'XIII Aurelia', 'V Prenestino/Centocelle', 'II Parioli/Nomentano', 'XI Arvalia/Portuense', 'South Park', 'Wooded Area', 'Potrero Hill', 'Castro/Upper Market', 'South of Market', 'Downtown/Civic Center', 'IX Eur', 'X Ostia/Acilia', 'La Jolla', 'Outer Sunset', 'Carmel Valley', 'Del Cerro', 'Mission', 'Unincorporated Areas', 'Matthews Beach', 'Broadway', 'Randwick', 'Waverley', 'Canterbury', 'XIV Monte Mario', 'XV Cassia/Flaminia', 'VII San Giovanni/Cinecittà', 'Hosford-Abernethy', 'Vieux-Québec/Cap-Blanc/Colline parlementaire', 'Waterfront Communities-The Island', 'Niagara', 'Donaustadt', 'Liesing', 'Alsergrund', 'Neubau', 'Leopoldstadt', 'Margareten', 'Favoriten', 'Hietzing', 'Josefstadt', 'Hernals', 'Little Portugal', 'Kensington-Cedar Cottage', 'Kitsilano', 'San Marco', 'Cannaregio', "Sant'Elena", 'Castello', 'West Point Grey', 'Trentino', 'Giudecca', 'Mount Pleasant West', 'Moss Park', 'Downtown Eastside', 'Kensington-Chinatown', 'Hornsby', 'Manly', 'Parkwoods-Donalda', 'Parramatta', 'Ryde', 'Sutherland Shire', 'Leichhardt', 'Palmerston-Little Italy', 'Etobicoke West Mall', 'Clairlea-Birchmount', 'Trinity-Bellwoods', 'Georgetown, Burleith/Hillandale', 'Elmhurst', 'East New York', 'Financial District', 'Flatbush', 'Boerum Hill', 'Fresh Meadows', 'Newham', 'Santa Monica', 'Maribyrnong', 'Monash', 'Justicia', 'Sol', 'Cortes', 'Universidad', 'Pacific Palisades', 'Rowland Heights', 'South San Gabriel', 'Recoletos', 'Santanyí', 'East Hollywood', 'Topanga', 'West Hills', 'Le Plateau-Mont-Royal', 'Le Sud-Ouest', 'Boroondara', 'Glen Eira', 'Moreland', 'District 17', 'District 15', 'Sóller', 'Campanet', 'Almenara', 'Bellas Vistas', 'Trafalgar', 'Darebin', 'District 6', 'District 5', 'Central Business District', 'Rosemont-La Petite-Patrie', 'Côte-des-Neiges-Notre-Dame-de-Grâce', 'Pierrefonds-Roxboro', 'Mercier-Hochelaga-Maisonneuve', 'Acacias', 'Ibiza', 'French Quarter', 'Fort Greene', 'Gravesend', 'Calvià', 'Selva', 'Vinateros', 'Arapiles', 'Algaida', 'District 16', 'Central City', 'Treme - Lafitte', 'St. Claude', 'Irish Channel', 'Tempelhofer Vorstadt', 'Prenzlauer Berg Südwest', 'Karl-Marx-Allee-Nord', 'Neue Kantstraße', 'Reuterstraße', 'Köpenick-Nord', 'Alt-Lichtenberg', 'Can Baró', 'el Poblenou', 'Alexanderplatz', 'nördliche Luisenstadt', 'Helmholtzplatz', 'Moabit Ost', 'la Sagrada Família', 'Sant Antoni', 'el Poble Sec', 'la Bordeta', 'el Fort Pienc', 'el Raval', 'Park Slope', 'Theater District', 'Reuilly', 'Batignolles-Monceau', 'Opéra', 'Gobelins', 'Vaugirard', 'Élysée', 'Luxembourg', "Sullivan's Gulch", 'King', 'Humboldt', 'Woollahra', 'South Parkdale', 'Landstra§e', 'San Lorenzo XXV Aprile', 'Bay Street Corridor', 'Dovercourt-Wallace Emerson-Junction', 'University', 'West End', 'Nob Hill', 'Western Addition', 'Parkside', 'City of Santa Cruz', 'Inner Richmond', 'Noord-Oost', 'IJburg - Zeeburgereiland', 'Bijlmer-Centrum', 'Frankfurter Allee Süd FK', 'Grunewald', 'Kurfürstendamm', 'Kantstraße', 'Regierungsviertel', 'Brunnenstr. Nord', 'Schöneberg-Nord', 'East Garfield Park', 'Frederiksberg', 'sterbro', 'Hollywood Hills West', 'Haringey', 'Arcadia', 'Mid-Wilshire', 'Beverly Hills', 'Culver City', 'Carson', 'Lomita', 'Gorgie West', 'Gorgie East', 'Shandon', 'Old Town, Princes Street and Leith Street', 'Nolita', 'Middle Village', 'St. George', 'NoHo', 'Ridgewood', 'SoHo', 'Gramercy', 'Gowanus', 'Kingston upon Thames', 'Kowloon City', 'Bromley', 'Wan Chai', 'Sawtelle', 'Temple City', 'View Park-Windsor Hills', 'Whittier', 'Commune de Genève', 'Comely Bank', 'Deans Village', 'Bonnington', 'Granton West and Salvesen', 'el Barri Gòtic', "la Dreta de l'Eixample", "l'Antiga Esquerra de l'Eixample", 'Craigmillar', 'Pilrig', 'Broughton North and Powderhall', 'Broughton South', 'Central & Western', 'Dn Laoghaire-Rathdown', 'Hounslow', 'Merriwood', 'Cobble Hill', 'Allerton', 'Clinton', 'Fairview Park', 'Argüelles', 'Artà', 'Puerta del Angel', 'Imperial', 'Valdeacederas', 'Palomeras Bajas', 'Rejas', 'Son Servera', 'St. Roch', 'El Segundo', 'Lake Balboa', 'Lynwood', 'Redondo Beach', 'Playa del Rey', 'Beverlywood', 'Loop', 'Prenzlauer Berg Nordwest', 'Plänterwald', 'Düsseldorfer Straße', 'Neuköllner Mitte/Zentrum', 'Forest', 'Mission Hill', 'Schaerbeek', 'Molenbeek-Saint-Jean', 'Irving Park', 'Lake View', 'Lincoln Park', 'Near West Side', 'Avondale', 'Highland', 'City Park West', 'Bispebjerg', 'Bruxelles', 'Tiergarten Süd', 'Watergraafsmeer', 'Oud-Oost', 'la Vila de Gràcia', 'Sant Pere, Santa Caterina i la Ribera', 'Schöneberg-Süd', 'ΝΕΟΣ ΚΟΣΜΟΣ', "la Nova Esquerra de l'Eixample", 'la Barceloneta', 'Biesdorf', 'LaSalle', 'Villeray-Saint-Michel-Parc-Extension', 'East Carrollton', 'District 2', 'District 20', 'Andratx', 'Sa Pobla', 'Borgerhout Intra Muros Zuid', 'Zuid', 'Slotervaart', 'De Aker - Nieuw Sloten', 'Oostelijk Havengebied - Indische Buurt', 'Didsbury East', 'Bradford', 'South Gate', 'ΚΕΡΑΜΕΙΚΟΣ', 'Theaterbuurt-Meir', 'Historisch Centrum', 'ΑΚΡΟΠΟΛΗ', 'Neu Lichtenberg', 'Osloer Straße', 'Montbau', "el Camp d'en Grassot i Gràcia Nova", 'Diagonal Mar i el Front Marítim del Poblenou', 'Frankfurter Allee Nord', 'Parkviertel', 'Südliche Friedrichstadt', 'Hostafrancs', 'Sants', 'südliche Luisenstadt', 'Brnshj-Husum', 'Capitol Hill', 'Newington and Dalkeith Road', 'Dalry and Fountainbridge', 'Tollcross', 'Merchiston and Greenhill', 'Polwarth', 'Canongate, Southside and Dumbiedykes', 'Great Junction Street', 'Meadowbank and Abbeyhill North', 'Stockbridge', 'Saint-Josse-ten-Noode', 'Beacon Hill', 'ΚΟΥΚΑΚΙ-ΜΑΚΡΥΓΙΑΝΝΗ', 'ΜΟΥΣΕΙΟ-ΕΞΑΡΧΕΙΑ-ΝΕΑΠΟΛΗ', 'Weißensee', 'Prenzlauer Berg Süd', 'Heerstrasse', 'Pankow Zentrum', 'Otto-Suhr-Allee', 'Sants - Badal', 'la Salut', 'Sant Andreu', 'Provençals del Poblenou', 'Moabit West', 'Oud - Berchem', 'Dam', 'South Boston', 'Uptown', 'Santa Fe', 'Battery Park City', 'East Flatbush', 'Fieldston', 'Memorial', 'Mission Bay', 'ΠΑΓΚΡΑΤΙ', 'ΑΓΙΟΣ ΚΩΝΣΤΑΝΤΙΝΟΣ-ΠΛΑΤΕΙΑ ΒΑΘΗΣ', 'Deurne Zuid West', 'el Clot', 'Anderlecht', 'Atocha', 'Bexley', 'Llucmajor', 'Santa Margalida', 'Guindalera', 'Berruguete', 'Sabin', 'Richmond', 'Foster-Powell', 'Dupont Circle, Connecticut Avenue/K Street', 'Brigittenau', 'Rudolfsheim-F\x9fnfhaus', 'San Polo', 'Mount Pleasant', 'Riley Park', 'Dufferin Grove', 'Annex', 'Church-Yonge Corridor', 'Marrickville', 'Willoughby', 'IV Tiburtina', 'Presidio Heights', 'Banbury-Don Mills', 'Mimico (includes Humber Bay Shores)', 'The Beaches', 'Kingsview Village-The Westway', 'Corso Italia-Davenport', 'Trento, Trentino', 'Capitol Hill, Lincoln Park', 'Leschi', 'Fremont', 'Balboa Park', 'Pacific Beach', 'Scripps Ranch', 'Ocean Beach', 'Old Town', 'Haight Ashbury', 'Outer Mission', 'Columbia City', 'Bernal Heights', 'The Hills Shire', 'North Sydney', 'Jette', 'Allston', 'Brighton', 'Havering', 'ΠΛΑΤΕΙΑ ΑΤΤΙΚΗΣ', 'Inca', 'Rivière-des-Prairies-Pointe-aux-Trembles', 'District 24', 'Seventh Ward', 'Ahuntsic-Cartierville', 'Hulme', 'Westmount', 'Bywater', 'South Lawndale', 'District 18', 'District 7', 'Mcdonogh', 'Concordia', 'South Lake Union', 'International District', 'Greenwood', 'Dunlap', 'Mount Baker', 'Pittwater', 'Inner Sunset', 'Newtonbrook West', 'Valby', 'Western Harbour and Leith Docks', 'Versoix', 'Hillside and Calton Hill', 'Croydon', 'Sherman Oaks', 'Unincorporated Santa Monica Mountains', 'North Center', 'Vanlse', 'Hampden', 'Colinton and Kingsknowe', 'Claremont', 'Century City', 'North Hollywood', 'Exposition Park', 'Jefferson Park', 'Avalon', 'Harvard Heights', 'Historic South-Central', 'Echo Park', 'Knox', 'Banyalbufar', 'Lloseta', 'Palos de Moguer', 'Outremont', 'Louvre', 'Delicias', 'Piedmont', 'Grant Park', 'Montavilla', 'Laurelhurst', 'Vieux-Limoilou', 'Kalorama Heights, Adams Morgan, Lanier Heights', 'Shaw, Logan Circle', 'District 19', 'Saint-Laurent', 'Manningham', 'Porreres', 'Lista', 'Felanitx', 'Casco Histórico de Vallecas', 'Simancas', 'El Monte', 'West Adams', 'Cuatro Caminos', 'Sant Llorenç des Cardassar', 'Prosperidad', 'Meadows and Southside', 'Sencelles', 'Hyde Park', 'Tempelhof', 'Ost 1', 'South Pasadena', 'Sun Valley', 'Rancho Park', 'The Shore and Constitution Street', 'Pico-Union', 'Five Points', 'Vallvidrera, el Tibidabo i les Planes', "el Camp de l'Arpa del Clot", 'el Guinardó', 'Brunnenstr. Süd', 'Wedding Zentrum', 'Edgewater', 'Rixdorf', 'Marchmont East and Sciennes', 'Trinity', 'New Town East and Gayfield', 'Thônex', 'Portobello', 'Sham Shui Po', 'Rogers Park', 'Uccle', 'Woluwe-Saint-Lambert', 'Virginia Village', 'Roslindale', 'South End', 'Dorchester', 'South Boston Waterfront', 'Marchmont West', 'Bruntsfield', 'Sloan Lake', 'ΓΚΑΖΙ', 'Dorsoduro', 'Ottakring', 'Spring Valley, Palisades, Wesley Heights, Foxhall Crescent, Foxhall Village, Georgetown Reservoir', 'Auburn', 'Quartier 4-3', 'South Tabor', 'Multnomah', 'Sellwood-Moreland Improvement League', 'Hayhurst', 'Loretteville', 'Cité Universitaire', 'Kerns', 'Cully', 'Southwest Hills', 'Glen Park', 'Russian Hill', 'Noe Valley', 'Belltown', 'Alki', 'Adams', 'III Monte Sacro', 'VIII Appia Antica', 'Brightwood Park, Crestwood, Petworth', 'West End, Foggy Bottom, GWU', 'Greenwood-Coxwell', 'Drakestr.', 'Arbor Lodge', 'Saint-Jean-Baptiste', 'York University Heights', 'Kennedy Park', 'Piave 1860', 'Kerrisdale', 'Neufchâtel-Est/Lebourgneuf', 'North Michigan Park, Michigan Park, University Heights', 'W\x8ahring', 'Deanwood, Burrville, Grant Park, Lincoln Heights, Fairmont Heights', 'Downtown, Chinatown, Penn Quarters, Mount Vernon Square, North Capitol Street', 'Hillcrest Village', 'Hawthorne, Barnaby Woods, Chevy Chase', 'Briar Hill-Belgravia', 'West Woodland', 'North Delridge', 'Ravenna', 'Wallingford', 'XII Monte Verde', 'Kearny Mesa', 'City Heights West', 'Warringah', 'Lane Cove', 'Montcalm', 'Woodstock', 'Duberger-Les Saules', 'Innere Stadt', 'Penzing', 'Don Valley Village', 'Renfrew-Collingwood', 'Marpole', 'Grandview-Woodland', 'Islington-City Centre West', "Tam O'Shanter-Sullivan", 'Junction Area', 'D\x9abling', 'Brookland, Brentwood, Langdon', 'Fairfax Village, Naylor Gardens, Hillcrest, Summit Park', 'Sheridan, Barry Farm, Buena Vista', 'Ivy City, Arboretum, Trinidad, Carver Langston', 'Pacific Heights', 'Little Italy', 'Park West', 'Encanto', 'Normal Heights', 'North Clairemont', 'West University Heights', 'Carpenedo', 'Murano', 'Lido', 'High Park North', 'Downsview-Roding-CFB', 'Fairview', 'Meidling', 'East End-Danforth', 'Steeles', 'Wychwood', 'Southwest Employment Area, Southwest/Waterfront, Fort McNair, Buzzard Point', 'Barstraße', 'Volkspark Wilmersdorf', 'ΑΚΑΔΗΜΙΑ ΠΛΑΤΩΝΟΣ', 'ΑΝΩ ΠΑΤΗΣΙΑ', 'Stadspark', 'Stapleton', 'South Dublin', 'Carthay', 'Boyle Heights', 'Monrovia', 'Barking and Dagenham', 'Pacífico', 'Manacor', 'Capdepera', 'West Riverside', 'Oakridge', 'Historic Anacostia', 'Markgrave', 'ΓΟΥΔΙ', 'el Parc i la Llacuna del Poblenou', 'Armour Square', 'Gaztambide', 'Whalley Range', 'Didsbury West', 'City Centre', 'Friedenau', 'Mira Mesa', 'Moreno Mission', 'Arbutus Ridge', 'Woodbine-Lumsden', 'Marghera', 'Cleveland Park, Woodley Park, Massachusetts Avenue Heights, Woodland-Normanstone Terrace', 'Takoma, Brightwood, Manor Park', 'Canada Bay', "O'Connor-Parkview", 'ΑΓΙΟΣ ΝΙΚΟΛΑΟΣ', 'ΑΜΠΕΛΟΚΗΠΟΙ', 'Blackford, West Mains and Mayfield Road', 'Abbeyhill', 'Floridsdorf', 'Wieden', 'Willowdale East', 'South Cambie', 'North Riverdale', 'Twining, Fairlawn, Randle Highlands, Penn Branch, Fort Davis Park, Fort Dupont', 'Roosevelt Island', 'Clawson', 'Flatiron District', 'ΠΑΤΗΣΙΑ', 'Vilapicina i la Torre Llobeta', 'la Sagrera', 'Sant Gervasi - la Bonanova', 'Pedralbes', 'Reed', 'Lairet', 'Bayview', 'Lower Queen Anne', 'Pankow Süd', 'Stuivenberg', 'Bay Park', 'Marina', 'Manhattan Beach', 'Mt. Tabor', 'San Carlos', 'West of Twin Peaks', 'Excelsior', 'Mann', 'North Admiral', 'Kenton', 'Roseway', 'Creston-Kenilworth', 'Yonge-St.Clair', 'Danforth', 'Ashfield', 'Botany Bay', 'Roncesvalles', 'Lambton Baby Point', 'Westminster-Branson', 'Cabbagetown-South St.James Town', 'Mariahilf', 'Howard University, Le Droit Park, Cardozo/Shaw', 'ΠΕΤΡΑΛΩΝΑ', 'Zurenborg', 'ΚΟΛΩΝΟΣ', 'ΚΥΨΕΛΗ', 'ΝΕΑ ΚΥΨΕΛΗ', 'Westchester', 'Chorlton', 'Belmont Cragin', 'Bay Village', 'Gateway - Green Valley Ranch', 'Glendora', 'Azusa', 'Altadena', 'Inverleith, Goldenacre and Warriston', 'Yarra Ranges', 'Westwood', 'Alaró', 'Horta', 'la Vila Olímpica del Poblenou', 'Sint-Andries', 'Geuzenveld - Slotermeer', 'Enfield', 'Northfield and Piershill', 'les Corts', 'Koekelberg', 'Burbank', 'Chopera', 'Leonidas', 'Berkeley', 'Colinton Mains and Firrhill', 'Tai Po', 'University City', 'Minor', 'First Hill', 'Outer Richmond', 'Darnall', 'Val-Bélair', 'Playter Estates-Danforth', 'Hastings-Sunrise', 'Long Branch', 'Milliken', 'Rosedale-Moore Park', 'Mt. Scott-Arleta', 'Lakeshore', 'Ses Salines', 'Cheviot Hills', 'Atwater Village', 'Binissalem', 'Maria de la Salut', 'Petra', 'Sineu', 'Hobsons Bay', 'Kingston', 'District 25', 'Watermael-Boitsfort', 'West Roxbury', 'Jamaica Plain', 'Verdun', 'Lower Garden District', 'Rusholme', 'Downtown Brooklyn', 'University Heights', 'LISMORE CITY COUNCIL', 'Brighton Beach', 'Cleveland Heights', 'Fort Hamilton', 'Rockridge', 'el Putxet i el Farró', 'el Besòs i el Maresme', 'Zehlendorf  Nord', 'Oberschöneweide', 'el Baix Guinardó', 'The Grange', 'La Jolla Village', 'Grand Boulevard', 'Charlestown', 'Canonmills and New Town North', 'Karow', 'la Font de la Guatlla', 'Altglienicke', 'Amandus - Atheneum', 'ΣΤΑΔΙΟ', 'Roxbury', 'Woluwe-Saint-Pierre', 'West Colfax', 'Blankenfelde/Niederschönhausen', 'Mierendorffplatz', 'Valley Village', 'Sylmar', 'Van Nuys', 'St. Johns', 'Overlook', 'Rancho Penasquitos', 'Sorrento Valley', 'Ocean View', 'Marghera Catene', 'Simmering', 'Strathcona', 'Moonee Valley', 'Homestead', 'Maizerets', 'Arcos', 'Palomas', 'Little Woods', 'San Gabriel', 'Pico-Robertson', 'Cheetham', 'Tarzana', 'Walnut', 'Prenzlauer Berg Nord', 'Prenzlauer Berg Ost', 'Reseda', 'Torrance', 'Hollygrove', 'District 21', 'San Fermín', 'San Diego', 'Fontarrón', 'Goya', 'Lower West Side', 'Mckinley Park', 'la Verneda i la Pau', 'Sant Gervasi - Galvany', 'Springfield Gardens', 'Lake Merritt', 'Kenwood', 'Navas', 'la Maternitat i Sant Ramon', 'Alt  Treptow', 'Saint-Sacrement', 'Saint-Louis', 'Lloret de Vistalegre', 
+  'Marlyville - Fontainbleau', 'Ionview', 'Ku-Ring-Gai', 'Henry Farm', 'Bathurst Manor', 'Cathedral Heights, McLean Gardens, Glover Park', 'Port Morris', 'Maspeth', 'Sunset Park', 'ΓΟΥΒΑ', 'Upper Laurel', 'Burwood', 'Humewood-Cedarvale', 'Victoria-Fraserview', 'Santa Croce', 'Malvern', 'Villaggio San Marco', 'Jackson Heights', 'West Queen Anne', 'North Queen Anne', 'Green Lake', 'University District', 'Madison Park', 'Mount Pleasant East', 'Stevens', 'Briarcliff', 'Core', 'Seward Park', 'Loma Portal', 'Gracemount, Southhouse and Burdiehouse', 'Hillingdon', 'Almendrales', 'Esporles', 'Crocker Amazon', 'Saint-Sauveur', 'Pointe-de-Sainte-Foy', 'Baldwin Park', 'Canoga Park', 'Touro', 'District 32', 'Vilafranc de Bonany', 'Bayside', 'Ciudad Jardín', 'Valldemossa', 'Cardinia', 'San Isidro', 'Albany Park', 'South Shore', 'Plan-les-Ouates', 'Peñagrande', 'Lucero', 'District 8', 'Bayou St. John', 'Webster', 'North Beach', 'Killarney', 'Birchcliffe-Cliffside', 'Dunbar Southlands', 'Frankfurter Allee Süd', 'Karlshorst', 'Auderghem', 'Britz', 'Leith (Albert Street)', 'Overland', 'North', 'Eagle Rock', 'Northwest District', 'Old Town/Chinatown', 'Cathedral Park', 'Sant Martí de Provençals', 'ΙΛΙΣΙΑ', 'Pioneer Square', 'Castaic Canyons', 'Mid-Beacon Hill', 'Seaview', 'Capitol View, Marshall Heights, Benning Heights', 'Hurstville', 'Rockdale', 'Flemingdon Park', 'Regent Park', 'Irvington', 'Englewood', 'Valverde', 'Casa de Campo', 'Portazgo', 'Castillejos', 'Albrechtstr.', 'Baumschulenweg', 'North Hills', 'Quintana', 'San Pascual', 'Brimbank', 'Schloß Charlottenburg', 'Del Aire', 'Hermosa Beach', 'Niño Jesús', 'Jerónimos', 'Puigpunyent', 'Marratxí', 'Maroondah', 'el Congrés i els Indians', 'Lincoln Square', 'Evere', 'Willowbrae and Duddingston Village', 'Carouge', 'Rosemead', 'Deyá', 'Harbor City', 'Borgerhout Extra Muros', 'Almagro', 'Nueva España', 'Banyule', 'Pointe-Claire', 'South Leith', 'Granton and Royston Mains', 'ΕΛΛΗΝΟΡΩΣΩΝ', 'Alt-Hohenschönhausen Süd', 'Vanier', 'Cap-Rouge', 'Lansing-Westgate', 'Forest Hill North', 'Flushing', 'Woodside', 'Roseville', 'Two Bridges', 'Vinegar Hill', 'Sunset Hill', 'Dorset Park', 'High Park-Swansea', 'West Los Angeles', 'Santa Clarita', 'Valdefuentes', 'Hume', 'Clairemont Mesa', 'Bird Land', 'Chirignago', 'Glenfield-Jane Heights', 'Sunset', 'New Toronto', 'Mosman', 'Valley Glen', 'Wyndham', 'Lawndale', 'Sillery', 'North St.James Town', 'Favaro', 'Oakmore', 'Kew Gardens', 'Norwood', 'Williamsbridge', 'Búger', 'District 14', 'ΒΟΤΑΝΙΚΟΣ', 'Toluca Lake', 'Broadmoor', 'Palmdale', 'Costitx', 'Boise', 'Hawthorne', 'El Sereno', 'Washington Park West', 'East Elmhurst', 'City Park', 'District 26', 'Atlantic', 'Serra Mesa', 'Castellana', 'Harrow', 'Nord 2', 'Chorlton Park', 'Pueblo Nuevo', 'Woodland Hills', 'Plateau', 'Niederschöneweide', 'Ost 2', 'Civic Center', 'Cypress Hills', 'Gentilly Terrace', 'Comillas', 'Vista Alegre', 'Diamond Bar', 'Rios Rosas', 'Moss Side', 'Northwest', 'Agincourt South-Malvern West', 'Willowdale West', 'Santa Barbara', 'Newtonbrook East', 'Eliot', 'North Beacon Hill', 'Pomona', 'Madison South', 'Vieux-Moulin', 'Ditmars Steinway', 'Harmonie', 'Union Station', 'District 13', 'Midtown District', 'Bridgeport', 'Portage Park', 'Platt Park', 'Humboldt Park', 'San Pedro', 'Fuente del Berro', 'Opañel', 'West Covina', 'Bunyola', 'Buenavista', 'Navarre', 'Borgerhout Intra Muros Noord', 'Montclair', 'The Inch', 'San Dimas', 'Mount Washington', 'Forest Glen', 'Near South Side', 'Ancoats and Clayton', 'Dillard', 'East Riverside', 'Sai Kung', 'District 27', 'el Carmel', 'Schmargendorf', 'Eilandje', 'ΝΙΡΒΑΝΑ', 'Brownsville', 'Gaasperdam - Driemond', 'Kaulsdorf', 'Ivy Hill', 'Greater Dandenong', 'Audubon', 'Jamaica', 'Shadow Hills', 'Monterey Park', 'Hispanoamérica', 'Shafter', 'St. Albans', 'Carroll Gardens', 'Vernon', 'Arrochar', 'Navy Yard', 'Bronxdale', 'City Of Kogarah', 'Grant Hill', 'Grantville', 'Glassell Park', 'ΛΥΚΑΒΗΤΤΟΣ', 'Estellencs', 'Lamont Riggs, Queens Chapel, Fort Totten, Pleasant Hill', 'Quartier 5-2', 'West Portland Park', 'Woodbine Corridor', 'East Queen Anne', 'Arverne', 'Richmond Hill', 'Chabot Park', 'Mosswood', 'Hilltop', 'CBD', 'River Terrace, Benning, Greenway, Dupont Park', 'la Marina de Port', 'Harrison/Denny-Blaine', 'Victoria Village', 'Bayview Village', 'Leaside-Bennington', 'University Park', 'Leith (Hermitage and Prospect Bank)', 'District 1', 'District 4', 'Brooklyn Action Corps', 'Whittier Heights', 'North City', 'Treasure Island/YBI', 'City of Capitola', 'Rancho Bernadino', 'Loyal Heights', 'Pleasant View', 'Midwood', 'Stuyvesant Town', 'Glenview', 'Halensee', 'Cory - Merrill', 'Friedrichshagen', 'Köllnische Heide', 'Brunsbütteler Damm', 'North Cleveland Park, Forest Hills, Van Ness', 'Lawton Park', 'College Area', 'Highland Creek', 'Hazelwood', 'Cherry Creek', 'Joppa', 'Brooklyn Heights', 'Eastchester', 'CLARENCE VALLEY COUNCIL', 'McClymonds', 'Twin Peaks', 'Sant Genís dels Agudells', 'Rose City Park', 'Media Legua', 'Encino', 'Vallcarca i els Penitents', 'Bellevue', 'Eastmont Hills', 'Oakland', 'Maple Leaf', 'Brookhaven-Amesbury', 'Cortez Hill', 'Beaumont-Wilshire', 'South Portland', 'North Tabor', 'Saint-Roch', 'Gardena', 'Montecito Heights', 'Vermont Square', 'Longsight', 'Sant Joan', 'Windsor Square', 'Llubí', 'DUMBO', 'Old City-Produce And Waterfront', 'Caballo Hills', 'Wakefield', 'Rancho Palos Verdes', 'Duddingston and Portobello South', 'Lancy', 'Bensonhurst', 'Concourse', 'Concepción', 'Ardwick', 'Pilar', 'Grand-Saconnex', 'Skyland', '1Ο ΝΕΚΡΟΤΑΦΕΙΟ', 'Linda Vista', 'Casa Loma', 'Keelesdale-Eglinton West', 'Levenshulme', 'East San Gabriel', 'Baldwin Hills/Crenshaw', 'Lakewood', 'Washington Park', 'North Capitol Hill', 'Santa María del Camí', 'Universiteitsbuurt', 'Hacienda Heights', 'Harbor Gateway', 'Fairgrounds', 'Stenhouse and Saughton Mains', 'Lakeview', 'ΠΛΑΤΕΙΑ ΑΜΕΡΙΚΗΣ', 'Teltower Damm', 'Trinity East and The Dudleys', 'Pico Rivera', 'Los Rosales', 'Morningside and Craighouse', 'Fillmore', 'Torrey Pines', 'Côte-Saint-Luc', 'Onex', 'Washington Virginia Vale', 'Johannisthal', 'MV 1', 'Longfellow', 'Bay Ridge', 'Merritt', 'Dyker Heights', 'Craigleith, Orchard Brae and Crewe Toll', 'East Craigs North', 'Collonge-Bellerive', 'Compton', 'Southern', 'Oakland Ave-Harrison St', 'Piedmont Avenue', 'Holy Cross', 'St. Thomas Dev', 'Mott Haven', 'Dammvorstadt', 'Abrantes', 'Murrayfield and Ravelston', 'Lincoln Heights', 'Ladera Heights', 'Tulane - Gravier', 'District 12', 'District 35', 'Cerritos', 'Tujunga', 'Yesler Terrace', 'Portland Downtown', 'Brederode', 'Algiers Point', 'Mancor de la Vall', 'Alderwood', 'Blake-Jones', 'Aluche', 'Quartier 4-5', 'Rego Park', 'Flatlands', 'Corona', 'Forest Hills', 'Hunters Hill', 'Seacliff', 'Woodridge, Fort Lincoln, Gateway', 'Marzahn-Süd', 'Arlington Heights', 'Pinar del Rey', 'Baker', 'Numancia', 'Chutes-Montmorency', 'Puerta Bonita', 'Covina', 'Kwai Tsing', 'Kwun Tong', 'New Town West', 'Highbridge', 'Trestle Glen', 'Hale', 'Easter Road and Hawkhill Avenue', 'East Los Angeles', 'Kew Gardens Hills', 'Crocker Highland', 'San Pablo Gateway', 'Shepherd Canyon', 'Caledonia-Fairbank', 'Weston', "L'Amoreaux", 'Bridgeton', 'Islands', 'Cole', 'Bellflower', 'Calabasas', 'Wedgwood', 'Gaslamp Quarter', 'Clanton Park', 'Sierra Madre', 'La Paz', 'Old Moat', 'Schmöckwitz/Karolinenhof/Rauchfangswerder', 'Estrella', 'Madrona', 'Rainier Beach', 'Taylor-Massey', 'Old East York', 'Danforth East York', 'Buchholz', 'Bohnsdorf', 'Kingsbridge', 'Lawrence Park South', 'Friendship Heights, American University Park, Tenleytown', 'ΑΝΩ ΚΥΨΕΛΗ', 'Industry', 'Winnetka', 'Pelmo Park-Humberlea', 'Oakwood Village', 'Rockaway Beach', 'Piedmont Pines', 'Veyrier', 'Lichtenrade', 'Fennpfuhl', 'Frick', 'Runnymede-Bloor West Village', 'Westend', 'Panorama City', 'Broadview North', 'Bay Ho', 'Holroyd', 'Blacktown', 'Lakewide', 'Paradise Park', 'Reservoir Hill-Meadow Brook', 'Sequoyah', 'Hillsdale', 'Strathfield', 'Talmadge', 'Porta', 'Bissuola', 'Weston-Pellam Park', 'Phinney Ridge', 'Bryant', 'Visitacion Valley', 'les Tres Torres', 'Craiglockhart', 'North Leith and Newhaven', 'District 22', 'Del Mar Heights', 'West Humber-Clairville', 'Bayview Woods-Steeles', 'Beverly Crest', 'Köpenick-Süd', 'Montuïri', 'Slateford and Chesser', 'Wong Tai Sin', 'West Ridge', 'Prestonfield', 'Borough Park', 'Douglas', 'La Crescenta-Montrose', 'Legazpi', 'Aravaca', 'Marroquina', 'Alameda de Osuna', 'Rouge', 'Wiesbadener Straße', 'Prescott', 'Woodhaven', 'Lynn-Highland Park', 'Fuller Park', 'West Pilton', 'Briarwood', 'Goose Hollow', 'Rockcliffe-Smythe', 'Mount Hope', 'Lawrence Park North', 'Berchem-Sainte-Agathe', 'Redwood Heights', 'Upper Rockridge', 'East Pasadena', 'Chêne-Bourg', 'Sha Tin', 'les Roquetes', 'Greater Grand Crossing', 'West Highland', 'Eastlake', 'Montlake', 'North College Park', 'Fairmount Park', 'South Burlingame', 'Fornalutx', 'Golden Gate', 'St.Andrew-Windfields', 'Forest Hill South', 'Colonial Village, Shepherd Park, North Portal Estates', 'Notre-Dame-des-Laurentides', 'Schloßstr.', 'Jamaica Estates', 'Siemensstadt', 'Queensferry East', 'Yonge-Eglinton', 'Olympic Hills', 'Broadview', 'Crown Hill', 'Bankstown', 'Ventas', 'Garden District', 'Rudow', 'Barnton, Cammo and Cramond South', 'Eastern', 'Northeast Park Hill', 'Villa Park', 'Windermere', 'Yuen Long', 'Anjou', 'Jésuites', 'Pearl', 'West Hill', 'Cármenes', 'Apostol Santiago', 'Lachine', 'Haller Lake', 'Wexford/Maryvale', 'Clayton', 'Friedrichsfelde Süd', 'Adelfas', 'Lankwitz', 'Gropiusstadt', 'Balgreen and Roseburn', 'Granada Hills', 'Tierrasanta', 'Southwest', 'Duarte', 'Genesee', 'Oak Park', 'Montebello', 'Bridle Path-Sunnybrook-York Mills', 'South Delridge', 'Millsmont', 'Castilla', 'Rummelsburger Bucht', 'Salvador', 'Casco Histórico de Barajas', 'La Cañada Flintridge', 'Drylaw', 'Quartier 4-2', 'Congress Park', 'High Point', 'Rahnsdorf/Hessenwinkel', 'Golf Links', 'Ralph Bunche', 'Withington', 'Moscardó', 'District 30', 'South Whittier', 'District 29', 'Veterans Administration', 'District 34', 'Canarsie', 'Mayfair, Hillbrook, Mahaning Heights', 'Tsuen Wan', 'Porter Ranch', 'Nillumbik', 'Gatow / Kladow', 'el Coll', 'Milan', 'Northwest Heights', 'Willowridge-Martingrove-Richview', 'Cypress Park', 'Leimert Park', 'Vallehermoso', 'Diamond Heights', 'Avocado Heights', 'Centennial', 'Casey', 'District 9', 'Bonaly and The Pentlands', 'Dunning', 'Far Rockaway', 'Mirasierra', 'Dorval', 'Mariendorf', 'Restalrig and Lochend', 'Timón', 'Alberoni', 'District 23', 'Hoover-Foster', 'Maxwell Park', 'Lac-Saint-Charles', 'Congress Heights, Bellevue, Washington Highlands', 'Centraal Station', 'El Viso', 'North Beach/Blue Ridge', 'City Heights East', 'Vernier', 'Weißensee Ost', 'Interbay', 'Randall Manor', 'Bitter Lake', 'Paradise Hills', 'Tessera', 'Rolando', 'Nord 1', 'Ambroz', 'Longwood', 'Grand Lake', 'Groenenhoek', 'West 4', 'Haringrode', 'Kiel', 'Stonegate-Queensway', 'District 11', 'Morningside', 'North Lawndale', 'Columbia St', 'Mahlsdorf', 'Otay Ranch', 'Northridge', 'Boswall and Pilton', 'West 1', 'North Park Hill', 'Tompkinsville', 'Concourse Village', 'Dollard-des-Ormeaux', 'Lake Murray', 'ΣΤΑΘΜΟΣ ΛΑΡΙΣΗΣ', 'el Turó de la Peira', 'Corstorphine', 'Ariany', 'Agoura Hills', 'Ciudad Universitaria', 'Quartier 5-4', 'Woburn', 'Colina', 'Craigentinny', 'Sarrià', 'Adlershof', 'ΓΚΥΖΗ', 'Quartier 5-1', 'Parkrose', 'Fallowfield', 'District 28', 'Valdezarza', 'Queens Village', 'Victory Heights', 'Southeast Magnolia', 'Near Southeast, Navy Yard', 'Penrith', 'Brentwood-Darlington', 'Morris Heights', 'Clason Point', 'Eastmoreland', 'South Park Hill', 'Milneburg', 'Ganshoren', 'Wilhelmstadt', 'Produce And Waterfront', 'Oak Center', 'Downey', 'Pelham Gardens', 'Fordham', 'Bedford Park-Nortown', 'Yorkdale-Glen Park', 'Palomeras Sureste', 'Hampden South', 'Gramercy Park', 'Elysian Valley', 'Goldsmith', 'Black Pearl', "la Font d'en Fargues", 'South Chicago', 'Blackhall', 'Douglas, Shipley Terrace', 'la Teixonera', 'Englemount-Lawrence', 'La Mirada', 'Clifton', 'Ozone Park', 'Greenbank and The Braids', 'Bay Terrace', 'Parkchester', 'Roosevelt', 'Melton', 'Norwood Park', 'Charlottenburg Nord', 'Pradolongo', 'Athmar Park', 'Chatsworth', 'Meyrin', 'Bendale', 'Costillares', 'West Brighton', 'District 33', 'Zehlendorf  Südwest', 'Chaffee Park', 'Mount Dennis', 'Regis', 'Escorca', 'Marble Hill', 'St.  Anthony', 'Mission Valley', 'Eglinton East', 'Portage Bay', "L'Aéroport", 'Pike-Market', 'Gaskill', 'Canillas', 'Liberton West and Braid Hills', 'Columbia', 'Buckow', 'West 2', 'Des Châtels', 'Signal Hill', 'Friedrichsfelde Nord', 'Shaughnessy', 'Coney Island', 'Ciutat Meridiana', 'la Prosperitat', 'Whittlesea', 'District 31', 'West Carson', 'Campbelltown', 'Sunland', "la Vall d'Hebron", 'Mattapan', 'Liberton East', 'Powellhurst-Gilbert', 'ΡΙΖΟΥΠΟΛΗ', 'ΠΟΛΥΓΩΝΟ', 'Bel-Air', 'Pacoima', 'District 10', 'Campamento', 'Piovera', 'District 3', 'Cliffcrest', 'La Verne', 'Fauntleroy', 'el Bon Pastor', 'Restalrig (Loganlea) and Craigentinny West', 'Casco Histórico de Vicálvaro', 'Entrevías', 'Schönholz/Wilhelmsruh/Rosenthal', 'Chêne-Bougeries', 'Los Angeles', 'Eringate-Centennial-West Deane', 'Saint-Léonard', 'Blankenburg/Heinersdorf/Märchenland', 'Aguilas', 'Consell', 'Zona Commerciale via Torino', 'Pill Hill', 'San Andrés', 'La Habra Heights', 'Gatewood', 'Windsor', 'Lents', 'Bath Beach', 'Norwalk', 'South Ozone Park', 'Montréal-Nord', 'ΣΕΠΟΛΙΑ', 'Old Aurora', 'Stevenson Ranch', 'Kingsway South', 'Muirhouse', 'Palos Verdes Estates', 'Cologny', 'Nieuw - Kwartier Oost', 'Agincourt North', 'ΠΡΟΜΠΟΝΑ', 'Guildwood'];
+
+  var propertyTypes = ['Loft', 'House', 'Apartment', 'Cabin', 'Condominium', 'Guesthouse', 'Townhouse', 'Dorm', 'Bed & Breakfast', 'Bungalow', 'Other', 'Timeshare', 'Villa', 'Chalet', 'Hostel', 'Boat', 'Serviced apartment', 'Castle', 'Vacation home', 'Boutique hotel', 'Treehouse', 'Camper/RV', 'Tent', 'Guest suite', 'Yurt', 'Hut', 'In-law', 'Cave', 'Nature lodge', 'Entire Floor', 'Earth House', 'Tipi'];
+
+  var cancellationPolicies = ['flexible', 'strict', 'moderate', 'moderate_new', 'flexible_new', 'strict_new', 'super_strict_60', 'super_strict_30', 'super_strict_30_new', 'super_strict_60_new'];
+
+  function initializeSelectize(elementId, optionList, placeholderText) {
+    $(elementId).selectize({
+      options: optionList.map(function(option) {
+        return {
+          text: option,
+          value: option
+        };
+      }),
+      placeholder: placeholderText,
+      create: false,
+      dropdownParent: 'body',
+      render: {
+        option: function(item, escape) {
+          return '<div>' + escape(item.text) + '</div>';
+        }
+      },
+      onChange: function(value) {
+        $(this.$dropdown).find('.option').each(function() {
+          if ($(this).data('value') === value) {
+            $(this).addClass('selected');
+          } else {
+            $(this).removeClass('selected');
+          }
+        });
+      }
+    });
+  }
+  
+  // Initialize Selectize dropdowns
+  initializeSelectize('#cancellation_policy', cancellationPolicies,"Select Cancellation Policy");
+  initializeSelectize('#property_type', propertyTypes,"Select Property Type");
+  initializeSelectize('#city', cities, "Select City");
+  initializeSelectize('#neighbourhood_cleansed', neighbourhoods, "Select Neighbourhood");
+  initializeSelectize('#country', countries, "Select Country");  
+
+});
+</script>
+
+</html>
